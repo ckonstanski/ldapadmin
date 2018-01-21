@@ -1,0 +1,11 @@
+((:name "ldapadmin"
+  :url "ldapadmin.tld"
+  :document-root "ldapadmin"
+  :title "LDAP Administration Tool"
+  :meta-description "LDAP Administration Tool"
+  :ldap (:ldap-host "ldap.tld"
+         :sslflag nil
+         :username "cn=Manager,dc=tld"
+         :password "Welcome1"
+         :base-dn "dc=tld"
+         :debug-mode t)))
