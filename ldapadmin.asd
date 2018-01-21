@@ -81,5 +81,4 @@
                             :components ((:file "webapp-loader")
                                          (:module ldapadmin
                                           :depends-on ("webapp-loader")
-                                          :components ((:file "site")
-                                                       (:file "pages-auth" :depends-on ("site"))))))))
+                                          :components ((:file "site")))))))
