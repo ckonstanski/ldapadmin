@@ -152,7 +152,7 @@ overwritten with the new one."
   
 ;; ========================================================================== ;;
 
-(defmacro def-page (request-type uri var-list page-function)
+(defmacro define-endpoint (request-type uri var-list page-function)
   "Does the grunt work of creating an `easy-handler' for each page you
 wish to publish."
   (let ((name (gensym)))
