@@ -57,13 +57,13 @@
   `(inetorg-view-search-json))
 
 (defmacro .inetorg-view-results ()
-  `(inetorg-view-results-json givenname sn mail postaladdress postalcode st l telephonenumber mobile))
+  `(inetorg-view-results-json givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory))
 
 (defmacro .inetorg-modify ()
   `(inetorg-modify-json cn))
 
 (defmacro .inetorg-modify-submit ()
-  `(inetorg-modify-submit-json givenname sn mail postaladdress postalcode st l telephonenumber mobile))
+  `(inetorg-modify-submit-json givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory))
 
 (defmacro .inetorg-delete ()
   `(inetorg-delete-json cn))
@@ -75,7 +75,7 @@
   `(inetorg-add-json))
 
 (defmacro .inetorg-add-submit ()
-  `(inetorg-add-submit-json givenname sn mail postaladdress postalcode st l telephonenumber mobile))
+  `(inetorg-add-submit-json givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory))
 
 ;; ========================================================================== ;;
 
@@ -88,10 +88,10 @@
 (define-endpoint :get "/logout" () .logout)
 (define-endpoint :get "/inetorg/view" () .inetorg-view)
 (define-endpoint :get "/inetorg/view/search" () .inetorg-view-search)
-(define-endpoint :post "/inetorg/view/results" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string)) .inetorg-view-results)
+(define-endpoint :post "/inetorg/view/results" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string) (businesscategory :parameter-type 'string)) .inetorg-view-results)
 (define-endpoint :post "/inetorg/modify" ((cn :parameter-type 'string)) .inetorg-modify)
-(define-endpoint :post "/inetorg/modify/submit" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string)) .inetorg-modify-submit)
+(define-endpoint :post "/inetorg/modify/submit" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string) (businesscategory :parameter-type 'string)) .inetorg-modify-submit)
 (define-endpoint :post "/inetorg/delete" ((cn :parameter-type 'string)) .inetorg-delete)
 (define-endpoint :post "/inetorg/delete/submit" ((cn :parameter-type 'string)) .inetorg-delete-submit)
 (define-endpoint :get "/inetorg/add" () .inetorg-add)
-(define-endpoint :post "/inetorg/add/submit" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string)) .inetorg-add-submit)
+(define-endpoint :post "/inetorg/add/submit" ((givenname :parameter-type 'string) (sn :parameter-type 'string) (mail :parameter-type 'string) (postaladdress :parameter-type 'string) (postalcode :parameter-type 'string) (st :parameter-type 'string) (l :parameter-type 'string) (telephonenumber :parameter-type 'string) (mobile :parameter-type 'string) (businesscategory :parameter-type 'string)) .inetorg-add-submit)

@@ -284,6 +284,7 @@
      [:th "l"]
      [:th "telephoneNumber"]
      [:th "mobile"]
+     [:th "businesscategory"]
      [:th "Del"]]]
    [:tbody
     (for [ldap-user (get jsonobj "results")]
@@ -299,6 +300,7 @@
          [:td {:onclick onclick} (get ldap-user "l")]
          [:td {:onclick onclick} (get ldap-user "telephonenumber")]
          [:td {:onclick onclick} (get ldap-user "mobile")]
+         [:td {:onclick onclick} (get ldap-user "businesscategory")]
          [:td [:img {:src "/static/images/edit-delete.png"
                      :onclick (str (namespace ::x) ".on_inetorg_delete_clicked('" cn "')")}]]]))]])
 
@@ -317,7 +319,8 @@
                                           :st (dommy/value (dommy/sel1 :#view-st))
                                           :l (dommy/value (dommy/sel1 :#view-l))
                                           :telephonenumber (dommy/value (dommy/sel1 :#view-telephonenumber))
-                                          :mobile (dommy/value (dommy/sel1 :#view-mobile))}
+                                          :mobile (dommy/value (dommy/sel1 :#view-mobile))
+                                          :businesscategory (dommy/value (dommy/sel1 :#view-businesscategory))}
                                  :handler handler-inetorg-view-results}))
 
 ;; ========================================================================== ;;
@@ -362,7 +365,8 @@
                                            :st (dommy/value (dommy/sel1 :#modify-st))
                                            :l (dommy/value (dommy/sel1 :#modify-l))
                                            :telephonenumber (dommy/value (dommy/sel1 :#modify-telephonenumber))
-                                           :mobile (dommy/value (dommy/sel1 :#modify-mobile))}
+                                           :mobile (dommy/value (dommy/sel1 :#modify-mobile))
+                                           :businesscategory (dommy/value (dommy/sel1 :#modify-businesscategory))}
                                   :handler handler-inetorg-modify-submit}))
 
 ;; ========================================================================== ;;
@@ -441,7 +445,8 @@
                                         :st (dommy/value (dommy/sel1 :#add-st))
                                         :l (dommy/value (dommy/sel1 :#add-l))
                                         :telephonenumber (dommy/value (dommy/sel1 :#add-telephonenumber))
-                                        :mobile (dommy/value (dommy/sel1 :#add-mobile))}
+                                        :mobile (dommy/value (dommy/sel1 :#add-mobile))
+                                        :businesscategory (dommy/value (dommy/sel1 :#add-businesscategory))}
                                :handler handler-inetorg-add-submit}))
 
 ;; ========================================================================== ;;

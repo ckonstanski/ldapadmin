@@ -22,6 +22,7 @@
       (:name "add-l" :label "l" :field-type "text")
       (:name "add-telephonenumber" :label "telephoneNumber" :field-type "text")
       (:name "add-mobile" :label "mobile" :field-type "text")
+      (:name "add-businesscategory" :label "businessCategory" :field-type "text")
       (:name "add-submit" :label "Create InetOrg Entry" :field-type "button")))
 
 (defun inetorg-add-json ()
@@ -37,7 +38,7 @@
                :accessor location-p))
   (:documentation ""))
 
-(defun inetorg-add-submit-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile)
+(defun inetorg-add-submit-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory)
   (with-auth (instance inetorg-add-submit)
     (with-ldap (ldap)
       (let ((ldap-user (make-instance 'ldap-user
@@ -49,6 +50,7 @@
                                       :st st
                                       :l l
                                       :telephonenumber telephonenumber
-                                      :mobile mobile)))
+                                      :mobile mobile
+                                      :businesscategory businesscategory)))
         (add-ldap-user ldap-user ldap)
         (setf (message instance) "InetOrg entry created successfully.")))))

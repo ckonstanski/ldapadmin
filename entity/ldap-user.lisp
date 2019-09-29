@@ -32,7 +32,10 @@
                     :accessor telephonenumber)
    (mobile :initarg :mobile
            :initform nil
-           :accessor mobile))
+           :accessor mobile)
+   (businesscategory :initarg :businesscategory
+                     :initform nil
+                     :accessor businesscategory))
   (:documentation "A single inetOrgPerson entry from LDAP."))
 
 (defmethod get-cn ((ldap-user ldap-user))

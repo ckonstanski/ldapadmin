@@ -35,6 +35,7 @@
       (:name "view-l" :label "l" :field-type "text")
       (:name "view-telephonenumber" :label "telephoneNumber" :field-type "text")
       (:name "view-mobile" :label "mobile" :field-type "text")
+      (:name "view-businesscategory" :label "businessCategory" :field-type "text")
       (:name "view-submit" :label "Search InetOrg Entries" :field-type "button")))
 
 (defun inetorg-view-search-json ()
@@ -53,7 +54,7 @@
                :accessor location-p))
   (:documentation ""))
 
-(defun inetorg-view-results-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile)
+(defun inetorg-view-results-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory)
   (with-auth (instance inetorg-view-results)
     (with-ldap (ldap)
       (setf (results instance)
@@ -66,5 +67,6 @@
                                        (:st ,st)
                                        (:l ,l)
                                        (:telephonenumber ,telephonenumber)
-                                       (:mobile ,mobile)))
+                                       (:mobile ,mobile)
+                                       (:businesscategory ,businesscategory)))
                   (lambda (x y) (string< (get-cn x) (get-cn y))))))))

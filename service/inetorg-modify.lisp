@@ -25,6 +25,7 @@
       (:name "modify-l" :label "l" :field-type "text")
       (:name "modify-telephonenumber" :label "telephoneNumber" :field-type "text")
       (:name "modify-mobile" :label "mobile" :field-type "text")
+      (:name "modify-businesscategory" :label "businessCategory" :field-type "text")
       (:name "modify-submit" :label "Modify InetOrg Entry" :field-type "button")))
 
 (defun inetorg-modify-json (cn)
@@ -41,7 +42,7 @@
                :accessor location-p))
   (:documentation ""))
 
-(defun inetorg-modify-submit-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile)
+(defun inetorg-modify-submit-json (givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory)
   (with-auth (instance inetorg-modify-submit)
     (with-ldap (ldap)
       (let ((ldap-user (make-instance 'ldap-user
@@ -53,6 +54,7 @@
                                       :st st
                                       :l l
                                       :telephonenumber telephonenumber
-                                      :mobile mobile)))
+                                      :mobile mobile
+                                      :businesscategory businesscategory)))
         (modify-ldap-user ldap-user ldap)
         (setf (message instance) "InetOrg entry saved successfully.")))))
