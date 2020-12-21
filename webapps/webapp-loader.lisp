@@ -3,16 +3,12 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defvar *acceptor* nil)
 (defvar *dispatch-table* '(#'dispatch-easy-handlers #'default-dispatcher))
 (defvar *webapps* (make-hash-table :test 'equal))
 (defvar *webapp* nil)
 (defparameter *port* 3006)
 (defparameter *session-timeout* 14400)
-
-;; ========================================================================== ;;
 
 (defclass webapp ()
   ((name :initarg :name
@@ -47,8 +43,6 @@ up in Google.")
          :accessor ldap))
   (:documentation ""))
 
-;; ========================================================================== ;;
-
 (defgeneric get-site-file-path (webapp)
   (:documentation "Builds a full filesystem path to a webapp's site
 file."))
@@ -64,8 +58,6 @@ file."))
             (ppcre:regex-replace-all "\\.lisp$" (format nil "~a" pages-file) ""))
           (remove-if (lambda (x) (equal x "shared"))
                      (shell-wrapper (format nil "find '~a' -maxdepth 1 -type f -iname 'pages*.lisp' |sort" (document-root webapp))))))
-
-;; ========================================================================== ;;
 
 (defun make-webapp-path (relative-path)
   "Makes an absolute filesystem path to a location in the webapps
@@ -92,8 +84,6 @@ overwritten with the new one."
   "Gets the webapp object."
   (gethash key *webapps*))
 
-;; ========================================================================== ;;
-
 (defun generate-sessionid ()
   "Generates a unique random string to seed the
 `*session-secret*'. The string is a SHA256 hash."
@@ -104,8 +94,6 @@ overwritten with the new one."
     (let ((digest (ironclad:make-digest 'ironclad:sha256)))
       (ironclad:update-digest digest entropic-value)
       (ironclad:byte-array-to-hex-string (ironclad:produce-digest digest)))))
-
-;; ========================================================================== ;;
 
 (defun populate-webapps ()
   (loop for options-file in (get-options-files) do
@@ -118,8 +106,6 @@ overwritten with the new one."
                                       :title (getf form :title)
                                       :meta-description (getf form :meta-description)
                                       :ldap (getf form :ldap)))))))
-
-;; ========================================================================== ;;
 
 (defun ldapadmin ()
   "Call this to start the server."
@@ -135,8 +121,6 @@ overwritten with the new one."
                                              :document-root (make-server-path (format nil "webapps/~a/" package))
                                              :name (format nil "~a-acceptor" package)))))))
 
-;; ========================================================================== ;;
-
 (defmacro with-request-wrapper (uri page-function)
   ;; Assigning package outside the backquote is necessary because
   ;; *package* resolves incorrectly to common-lisp-user inside the
@@ -150,8 +134,6 @@ overwritten with the new one."
          (setf (session-value :permissions) "anonymous"))
        (,page-function))))
   
-;; ========================================================================== ;;
-
 (defmacro define-endpoint (request-type uri var-list page-function)
   "Does the grunt work of creating an `easy-handler' for each page you
 wish to publish."

@@ -12,3 +12,4 @@ pom.xml.asc
 .hg
 profiles.clj
 figwheel_server.log
+.rebel_readline_history

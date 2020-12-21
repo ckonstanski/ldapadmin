@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defparameter *menu-config* '((:id "a_menu_home" :label "Home" :url "/home" :handler "/home" :permission "t")
                               (:id "a_menu_login" :label "Login" :url "/login" :handler "/login" :permission "anonymous")
                               (:id "a_menu_logout" :label "Logout" :url "/logout" :handler "/logout" :permission "admin")

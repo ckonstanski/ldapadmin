@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defclass ldap-user (entity)
   ((givenname :initarg :givenname
               :initform nil

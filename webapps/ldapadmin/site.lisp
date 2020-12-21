@@ -3,9 +3,7 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
-(defmacro .base ()
+(defmacro .base (&optional (onload-fn "goto_location('/home')"))
   `(html5
     `(html
       (head
@@ -13,30 +11,36 @@
        ((meta :charset "utf-8"))
        ((title) ,(title *webapp*))
        ,@(mapcar (lambda (css)
-                   `((link :rel "stylesheet" :href ,css)))
-                 '("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")))
+                   `((link :rel "stylesheet" :href ,(getf css :href) :integrity ,(getf css :integrity) :crossorigin ,(getf css :crossorigin))))
+                 '((:href "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" :integrity "sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" :crossorigin "anonymous")))
        ,@(mapcar (lambda (js)
-                   `((script :type "text/javascript" :src ,js)))
-                 '("https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"
-                   "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-                   "/static/js/cljs/main.js"))
-      (body
+                   `((script :type "text/javascript" :src ,(getf js :src) :integrity ,(getf js :integrity) :crossorigin ,(getf js :crossorigin))))
+                 '((:src "https://code.jquery.com/jquery-3.2.1.slim.min.js" :integrity "sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" :crossorigin "anonymous")
+                   (:src "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" :integrity "sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" :crossorigin "anonymous")
+                   (:src "https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" :integrity "sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" :crossorigin "anonymous")))
+       ((script :type "text/javascript" :src "/static/js/cljs/main.js")))
+      ((body :onload ,(format nil "hworch.core.~a" ,onload-fn))
        ((div :class "container-fluid")
-        ((div :class "page-header")
-         ((h2 :align "center") ,(title *webapp*)))
+        ((div :class "row")
+         ((div :class "col") "&nbsp;")
+         ((div :class "col")
+          ((div :class "page-header")
+           ((h2 :align "center") ,(title *webapp*))))
+         ((div :class "col") "&nbsp;"))
         ((div :id "menu" :class "well"))
-        ((div :id "location"))
+        ((div :id "location" :style "display: none"))
         ((div :id "errormsg"))
         ((div :id "message"))
         ((div :id "body")))))))
 
-;; ========================================================================== ;;
-
 (defmacro .location ()
-  `(location-json))
+  `(location-json location))
 
-(defmacro .home ()
+(defmacro .home-get ()
   `(home-json))
+
+(defmacro .home-post ()
+  `(home-json message errormsg))
 
 (defmacro .menu ()
   `(menu-json))
@@ -77,11 +81,10 @@
 (defmacro .inetorg-add-submit ()
   `(inetorg-add-submit-json givenname sn mail postaladdress postalcode st l telephonenumber mobile businesscategory))
 
-;; ========================================================================== ;;
-
 (define-endpoint :get "/" () .base)
-(define-endpoint :get "/location" () .location)
-(define-endpoint :get "/home" () .home)
+(define-endpoint :post "/location" ((location :parameter-type 'string)) .location)
+(define-endpoint :get "/home" () .home-get)
+(define-endpoint :post "/home" ((message :parameter-type 'string) (errormsg :parameter-type 'string)) .home-post)
 (define-endpoint :get "/menu" () .menu)
 (define-endpoint :get "/login" () .login)
 (define-endpoint :post "/login/authenticate" ((dn :parameter-type 'string) (password :parameter-type 'string)) .login-authenticate)

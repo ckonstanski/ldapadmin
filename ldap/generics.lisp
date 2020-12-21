@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defgeneric disconnect (ldap)
   (:documentation ""))
 

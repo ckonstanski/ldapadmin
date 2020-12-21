@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defun compile-and-load (filename)
   "Compiles and then loads a file.  `filename' should not have an
 extension, such as .fasl or .lisp."

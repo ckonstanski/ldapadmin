@@ -3,12 +3,8 @@
 
 (in-package #:cl)
 
-;; ========================================================================== ;;
-
 (defpackage #:ldapadmin-system (:use #:cl #:asdf))
 (in-package #:ldapadmin-system)
-
-;; ========================================================================== ;;
 
 (defmacro do-defsystem (&key name version maintainer author description long-description depends-on components)
   `(defsystem ,name
@@ -21,16 +17,10 @@
        :depends-on ,(eval depends-on)
        :components ,components))
 
-;; ========================================================================== ;;
-
 (defparameter *asdf-packages* '(net-telent-date cl-ppcre uffi hunchentoot cl-log ironclad cl-json drakma trivial-ldap))
-
-;; ========================================================================== ;;
 
 (loop for pkg in *asdf-packages* do
      (ql:quickload (symbol-name pkg)))
-
-;; ========================================================================== ;;
 
 (do-defsystem :name "ldapadmin"
               :version "1.00.000"
@@ -67,15 +57,14 @@
                                          (:file "rest-service" :depends-on ("base-service"))
                                          (:file "auth-service" :depends-on ("rest-service"))
                                          (:file "generic-form" :depends-on ("rest-service"))
-                                         (:file "menu" :depends-on ("base-service"))
-                                         (:file "home" :depends-on ("rest-service"))
-                                         (:file "login" :depends-on ("generic-form"))
-                                         (:file "login-authenticate" :depends-on ("rest-service"))
-                                         (:file "logout" :depends-on ("rest-service"))
-                                         (:file "inetorg-view" :depends-on ("auth-service" "generic-form"))
-                                         (:file "inetorg-modify" :depends-on ("auth-service" "generic-form"))
-                                         (:file "inetorg-delete" :depends-on ("auth-service" "generic-form"))
-                                         (:file "inetorg-add" :depends-on ("auth-service" "generic-form"))))
+                                         (:file "menu-service" :depends-on ("base-service"))
+                                         (:file "home-service" :depends-on ("rest-service"))
+                                         (:file "login-service" :depends-on ("generic-form"))
+                                         (:file "logout-service" :depends-on ("rest-service"))
+                                         (:file "inetorg-view-service" :depends-on ("auth-service" "generic-form"))
+                                         (:file "inetorg-modify-service" :depends-on ("auth-service" "generic-form"))
+                                         (:file "inetorg-delete-service" :depends-on ("auth-service" "generic-form"))
+                                         (:file "inetorg-add-service" :depends-on ("auth-service" "generic-form"))))
                            (:module webapps
                             :depends-on (service)
                             :components ((:file "webapp-loader")

@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defclass ldap () 
   ((ldap-host :initarg :ldap-host
               :initform nil

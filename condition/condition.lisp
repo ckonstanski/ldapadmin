@@ -3,7 +3,5 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (define-condition handled-error (error)
   ((text :initarg :text :reader text)))

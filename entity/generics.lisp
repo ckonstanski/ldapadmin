@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defgeneric attribute-value-list (entity &optional keep-nulls)
   (:documentation "Builds an alist of attribute/value pairs."))
 

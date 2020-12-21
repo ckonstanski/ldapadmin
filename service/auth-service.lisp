@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defclass auth-service (rest-service)
   ()
   (:documentation ""))

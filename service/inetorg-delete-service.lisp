@@ -3,9 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-;; inetorg-delete
-
 (defclass inetorg-delete (auth-service)
   ((cn :initarg :cn
        :initform nil
@@ -18,9 +15,6 @@
 (defun inetorg-delete-json (cn)
   (with-auth (instance inetorg-delete)
     (setf (cn instance) cn)))
-
-;; ========================================================================== ;;
-;; inetorg-delete-submit
 
 (defclass inetorg-delete-submit (auth-service)
   ()

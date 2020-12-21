@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defclass entity ()
   ()
   (:documentation "Superclass for all entity objects. An entity object

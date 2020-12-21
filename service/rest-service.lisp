@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defclass rest-service (base-service)
   ((location :initarg :location
              :initform nil

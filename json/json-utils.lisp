@@ -3,8 +3,6 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defun json-to-object (object-type json-obj)
   (remove-if-not (lambda (x)
                    (let ((found-value nil))
@@ -20,8 +18,6 @@
                                           (cdr (find-if (lambda (param) (eq (car param) symb)) obj)))))
                              object))
                          json-obj)))
-
-;; ========================================================================== ;;
 
 (defun objects-to-json (list-of-objects &optional (explicit-encoder-p nil))
   (labels ((objectp (object)

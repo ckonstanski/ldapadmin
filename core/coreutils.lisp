@@ -7,12 +7,8 @@
 
 (in-package #:ldapadmin)
 
-;; ========================================================================== ;;
-
 (defparameter *server-root* (namestring (asdf:system-relative-pathname (intern (package-name *package*)) "./"))
   "The location of the web server root on the filesystem.")
-
-;; ========================================================================== ;;
 
 (defmacro with-gensyms (syms &body body)
   `(let ,(mapcar #'(lambda (s)
