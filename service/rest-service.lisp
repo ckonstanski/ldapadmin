@@ -20,12 +20,10 @@
 
 (defmethod initialize-instance :after ((rest-service rest-service) &key)
   (when (and (location-p rest-service) (null (location rest-service)))
-    (setf (location rest-service) (type-to-path rest-service))
-    (setf (session-value :location) (location rest-service))))
+    (setf (location rest-service) (type-to-path rest-service))))
 
-(defun location-json ()
-  (let ((location (if (session-value :location) (session-value :location) "/home")))
-  (format nil "{\"location\":\"~a\"}" location)))
+(defun location-json (&optional (location "/home"))
+  (format nil "{\"location\":\"~a\"}" location))
 
 (defun type-to-path (rest-type)
-  (concatenate 'string "/" (ppcre:regex-replace "-" (string-downcase (type-of rest-type)) "/")))
+  (concatenate 'string "/" (ppcre:regex-replace "-service" (string-downcase (type-of rest-type)) "/")))

@@ -30,26 +30,26 @@
              :accessor children))
   (:documentation ""))
   
-(defclass menu (base-service)
+(defclass menu-service (base-service)
   ((menuitems :initarg :menuitems
               :initform nil
               :accessor menuitems))
   (:documentation ""))
 
-(defmethod initialize-instance :after ((menu menu) &key)
-  (setf (menuitems menu)
-            (mapcar (lambda (x)
-                      (make-instance 'menuitem
-                                     :id (getf x :id)
-                                     :label (getf x :label)
-                                     :url (getf x :url)
-                                     :handler (getf x :handler)))
-                    (remove-if 'null (mapcar (lambda (x)
-                                               (when (find-if (lambda (y)
-                                                                (string= (getf x :permission) y))
-                                                              `("t" ,(session-value :permissions)))
-                                                 x))
-                                             *menu-config*)))))
+(defmethod initialize-instance :after ((menu-service menu-service) &key)
+  (setf (menuitems menu-service)
+        (mapcar (lambda (x)
+                  (make-instance 'menuitem
+                                 :id (getf x :id)
+                                 :label (getf x :label)
+                                 :url (getf x :url)
+                                 :handler (getf x :handler)))
+                (remove-if 'null (mapcar (lambda (x)
+                                           (when (find-if (lambda (y)
+                                                            (string= (getf x :permission) y))
+                                                          `("t" ,(session-value :permissions)))
+                                             x))
+                                         *menu-config*)))))
 
 (defun menu-json ()
-  (objects-to-json `(,(make-instance 'menu))))
+  (objects-to-json `(,(make-instance 'menu-service))))

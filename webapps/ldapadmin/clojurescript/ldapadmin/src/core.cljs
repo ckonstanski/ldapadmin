@@ -2,7 +2,8 @@
   (:require-macros [hiccups.core :as hiccups :refer [html]])
   (:require [ajax.core :refer [GET POST]]
             [dommy.core :as dommy]
-            [hiccups.runtime :as hiccupsrt]))
+            [hiccups.runtime :as hiccupsrt]
+            [clojure.string :as str]))
 
 ;; declarations
 
@@ -106,7 +107,7 @@
   
 ;; forms
 
-(hiccups/defhtml template-generic-form
+(hiccups/defhtml template-generic-form [jsonobj]
    [:div {:id "form-errormsg"}]
    [:form {:name (get jsonobj "name")
            :id (get jsonobj "name")
@@ -207,8 +208,8 @@
   [:ul {:class "nav nav-pills"}
    (for [menuitem menuitems]
      [:li {:class "nav-item"}
-      [:a {:class (cond (= (clojure.string/upper-case (get menuitem "handler"))
-                           (clojure.string/upper-case (dommy/html (dommy/sel1 :#location))))
+      [:a {:class (cond (= (str/upper-case (get menuitem "handler"))
+                           (str/upper-case (dommy/html (dommy/sel1 :#location))))
                         "nav-link active"
                         :else
                         "nav-link")
@@ -233,7 +234,7 @@
     (notifications jsonobj)
     (dommy/set-html! (dommy/sel1 :#body) (template-home jsonobj))))
 
-(defn render-home []
+(defn render-home
   ([]
    (GET "/home" {:handler handler-home}))
   ([message errormsg]
@@ -279,8 +280,8 @@
 
 (defn render-login-authenticate []
   (POST "/login/authenticate" {:format :raw
-                               :params {:username (dommy/value (dommy/sel1 :#username))
-                                        :pwd (dommy/value (dommy/sel1 :#pwd))}
+                               :params {:dn (dommy/value (dommy/sel1 :#dn))
+                                        :password (dommy/value (dommy/sel1 :#password))}
                                :handler handler-login-authenticate}))
 
 ;; logout
@@ -426,10 +427,7 @@
 ;; inetorg-modify
 
 (defn on-inetorg-modify-clicked [cn]
-  (when (-> (jquery "#inetorg-modify-form")
-            (.get "0")
-            (.checkValidity))
-    (render-inetorg-modify cn))
+  (render-inetorg-modify cn))
 
 (hiccups/defhtml template-inetorg-modify [jsonobj]
   (template-generic-form (get jsonobj "form")))
@@ -438,7 +436,7 @@
   (let [jsonobj (js->clj (js/JSON.parse response))
         jquery (js* "$")]
     (auth-notifications jsonobj)
-    (dommy/set-html! (dommy/sel1 :#modify-body) (template-inetrog-modify jsonobj))
+    (dommy/set-html! (dommy/sel1 :#modify-body) (template-inetorg-modify jsonobj))
     (doseq [[name value] (get jsonobj "ldapUserValues")]
       (dommy/set-value! (dommy/sel1 (keyword (str "#modify-" name))) value))
     (.modal (jquery "#modify"))))
@@ -451,12 +449,12 @@
 ;; inetorg-modify-submit
 
 (defn on-inetorg-modify-submit-clicked []
+  (.modal (jquery "#modify") "hide")
   (render-inetorg-modify-submit))
 
 (defn handler-inetorg-modify-submit [response]
   (let [jsonobj (js->clj (js/JSON.parse response))]
     (auth-notifications jsonobj)
-    (notifications jsonobj)
     (on-menu-clicked "/inetorg/view")))
 
 (defn render-inetorg-modify-submit []
@@ -506,7 +504,6 @@
 (defn handler-inetorg-delete-submit [response]
   (let [jsonobj (js->clj (js/JSON.parse response))]
     (auth-notifications jsonobj)
-    (notifications jsonobj)
     (on-menu-clicked "/inetorg/view")))
 
 (defn render-inetorg-delete-submit [cn]
@@ -572,7 +569,7 @@
     (on-menu-clicked (get jsonobj "location"))
     (notifications jsonobj)))
 
-(defn goto-location []
+(defn goto-location [location]
   (POST "/location" {:format :raw
                      :params {:location location}
                      :handler handler-location}))

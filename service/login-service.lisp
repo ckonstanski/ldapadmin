@@ -35,7 +35,7 @@
       (setf (message login-authenticate-service) "Successfully logged in.")
       (setf (errormsg login-authenticate-service) "Login failed.")))
 
-(defun login-authenticate-json (username pwd)
+(defun login-authenticate-json (dn password)
   (let ((auth-result nil))
     (when (check-ldap-password (ldap *webapp*) dn password)
       (setf (session-value :permissions) "admin")

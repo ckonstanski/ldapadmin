@@ -9,11 +9,11 @@
 
 (defmethod initialize-instance :after ((auth-service auth-service) &key)
   (when (not (string= (session-value :permissions) "admin"))
-    (setf (location auth-service) "home")
+    (setf (location auth-service) "/home")
     (setf (errormsg auth-service) "You are not authorized to access this resource.")))
 
-(defmacro with-auth ((instance form-class) &body body)
-  `(let ((,instance (make-instance ',form-class)))
+(defmacro with-auth ((instance auth-service) &body body)
+  `(let ((,instance (make-instance ',auth-service)))
      (when (null (errormsg ,instance))
        ,@body)
      (objects-to-json `(,,instance))))

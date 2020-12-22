@@ -3,14 +3,14 @@
 
 (in-package #:ldapadmin)
 
-(defclass inetorg-view (auth-service)
+(defclass inetorg-view-service (auth-service)
   ((title :initarg :title
           :initform nil
           :accessor title))
   (:documentation ""))
 
 (defun inetorg-view-json ()
-  (with-auth (instance inetorg-view)
+  (with-auth (instance inetorg-view-service)
     (setf (title instance) "Use the form to filter the InetOrg results.")))
 
 (defclass inetorg-view-search-service (auth-service)
@@ -45,7 +45,7 @@
   (with-auth (instance inetorg-view-search-service)
     nil))
 
-(defclass inetorg-view-results (auth-service)
+(defclass inetorg-view-results-service (auth-service)
   ((results :initarg :results
             :initform nil
             :accessor results)
