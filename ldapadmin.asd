@@ -17,25 +17,29 @@
        :depends-on ,(eval depends-on)
        :components ,components))
 
-(defparameter *asdf-packages* '(net-telent-date cl-ppcre uffi hunchentoot cl-log ironclad cl-json drakma trivial-ldap))
+(defparameter *quicklisp-packages* '(net-telent-date cl-ppcre uffi hunchentoot cl-log ironclad cl-json drakma trivial-ldap))
+(defparameter *asdf-packages* '(org-ckons-core))
+(defparameter *all-packages* (append *quicklisp-packages* *asdf-packages*))
 
-(loop for pkg in *asdf-packages* do
+(loop for pkg in *quicklisp-packages* do
      (ql:quickload (symbol-name pkg)))
 
 (do-defsystem :name "ldapadmin"
-              :version "1.00.000"
-              :maintainer "Carlos Konstanski <ckonstanski@pippiandcarlos.com>"
-              :author "Carlos Konstanski <ckonstanski@pippiandcarlos.com>"
+              :version "2"
+              :maintainer "Carlos Konstanski <me@ckons.org>"
+              :author "Carlos Konstanski <me@ckons.org>"
               :description "ldapadmin"
-              :long-description "ldapadmin is a web application written in Common Lisp, based on the Hunchentoot web server. Its purpose is to be an administrative frontend to an openldap server."
-              :depends-on *asdf-packages*
+              :long-description "ldapadmin is a web application written in Common Lisp, based on the Hunchentoot web server. It is an LDAP frontend web UI."
+              :depends-on *all-packages*
               :components ((:module core
-                            :components ((:file "coreutils")
-                                         (:file "httputils" :depends-on ("coreutils"))
-                                         (:file "html" :depends-on ("coreutils"))))
+                            :components ((:file "core")))
                            (:module condition
                             :depends-on (core)
                             :components ((:file "condition")))
+                           (:module http
+                            :depends-on (condition)
+                            :components ((:file "httputils")
+                                         (:file "html")))
                            (:module file
                             :depends-on (condition)
                             :components ((:file "file-utils")))

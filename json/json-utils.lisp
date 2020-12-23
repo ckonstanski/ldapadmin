@@ -6,13 +6,13 @@
 (defun json-to-object (object-type json-obj)
   (remove-if-not (lambda (x)
                    (let ((found-value nil))
-                     (loop for slot in (map-slot-names x) do
+                     (loop for slot in (org-ckons-core::map-slot-names x) do
                           (when (slot-value x slot)
                             (setf found-value t)))
                      found-value))
                  (mapcar (lambda (obj)
                            (let ((object (make-instance object-type)))
-                             (loop for slot in (map-slot-names object) do
+                             (loop for slot in (org-ckons-core::map-slot-names object) do
                                   (let ((symb (intern (symbol-name slot) :keyword)))
                                     (setf (slot-value object slot)
                                           (cdr (find-if (lambda (param) (eq (car param) symb)) obj)))))
@@ -58,13 +58,13 @@
                                                                   (map-slots value)))
                                                              (t
                                                               value))))))
-                                      (map-slot-names object))))
+                                      (org-ckons-core::map-slot-names object))))
            (listify (list-of-objects)
              (mapcar (lambda (object)
                        (map-slots object))
                      list-of-objects)))
     (let ((listobj (listify list-of-objects)))
-      (reduce-to-comma-separated-string (mapcar (lambda (alist)
+      (org-ckons-core::reduce-to-comma-separated-string (mapcar (lambda (alist)
                                                   (if explicit-encoder-p
                                                       (json:with-explicit-encoder
                                                         (json:encode-json-to-string (cons :object alist)))

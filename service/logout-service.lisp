@@ -10,8 +10,9 @@
   (:documentation ""))
 
 (defmethod initialize-instance :after ((logout-service logout-service) &key)
+  (setf (location logout-service) "/home")
   (setf (message logout-service) "You are now logged out."))
 
 (defun logout-json ()
-  (set-user (make-default-user))
+  (setf (session-value :permissions) nil)
   (objects-to-json `(,(make-instance 'logout-service))))

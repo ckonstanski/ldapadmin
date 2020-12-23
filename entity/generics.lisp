@@ -12,9 +12,10 @@ slots whose names match `regex'."))
 
 (defgeneric intersect-slots (entity slots)
   (:documentation "Since the built-in `intersect' function does not
-take package name prefixes into account, and since `map-slot-names'
-returns slot names prefixed with the package name, this method was
-written to intersect lists ignoring package prefixes."))
+take package name prefixes into account, and since
+`org-ckons-core::map-slot-names' returns slot names prefixed with the
+package name, this method was written to intersect lists ignoring
+package prefixes."))
 
 (defgeneric get-cn (ldap-user)
   (:documentation "Generates the CN of an `ldap-user'. `trivial-ldap'

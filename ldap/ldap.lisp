@@ -120,8 +120,8 @@ binddn. Returns `t' if the password is valid, `nil' otherwise."
 \"Konstanski\"))' to an LDAP search base fragment like
 \"(givenname=Carlos)(sn=Konstanski)\". Any `nil' or empty-string
 values are ignored."
-  (reduce-to-char-separated-string (mapcar (lambda (term)
-                                             (when (not (null-or-empty-p (cadr term)))
+  (org-ckons-core::reduce-to-char-separated-string (mapcar (lambda (term)
+                                             (when (not (org-ckons-core::null-or-empty-p (cadr term)))
                                                (format nil
                                                        "(~a=~a)"
                                                        (symbol-name (car term))

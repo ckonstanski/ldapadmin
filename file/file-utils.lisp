@@ -10,7 +10,7 @@ extension, such as .fasl or .lisp."
   (load filename))
 
 (defun write-pid-file ()
-  (shell-wrapper (format nil "echo ~a >~a/~a.pid" (sb-posix:getpid) (sb-posix:getenv "HOME") (string-downcase (package-name *package*)))))
+  (org-ckons-core::shell-wrapper (format nil "echo ~a >~a/~a.pid" (sb-posix:getpid) (sb-posix:getenv "HOME") (string-downcase (package-name *package*)))))
 
 (defun file-to-list (infile)
   "Reads `infile' and returns a list, where each atom is a single
@@ -59,8 +59,8 @@ line at a time."
 directory does not exist, it will be created."
   (when (and (file-exists-p source)
              (file-p source)
-             (not (null-or-empty-p destination)))
-    (let ((destination-parts (nreverse (remove-if #'null-or-empty-p (ppcre:split "/" destination))))
+             (not (org-ckons-core::null-or-empty-p destination)))
+    (let ((destination-parts (nreverse (remove-if #'org-ckons-core::null-or-empty-p (ppcre:split "/" destination))))
           (destination-file "")
           (destination-directory ""))
         (setf destination-file (pop destination-parts))
@@ -80,19 +80,19 @@ old."
   (uffi:run-shell-command (format nil "find ~a/* -regex '~a' |xargs rm -rf" directory-path regex)))
 
 (defun file-exists-p (file-path)
-  (equal (car (shell-wrapper (format nil "if test -f '~a'; then echo 0; else echo 1; fi" file-path))) "0"))
+  (equal (car (org-ckons-core::shell-wrapper (format nil "if test -f '~a'; then echo 0; else echo 1; fi" file-path))) "0"))
 
 (defun file-mtime (file-path)
-  (let ((output (car (shell-wrapper (format nil "ls --full-time '~a' |awk '{ print $6,$7 }' |awk -F. '{ print $1; }'" file-path)))))
-    (if (not (match-it "^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$" output))
+  (let ((output (car (org-ckons-core::shell-wrapper (format nil "ls --full-time '~a' |awk '{ print $6,$7 }' |awk -F. '{ print $1; }'" file-path)))))
+    (if (not (org-ckons-core::match-it "^\\d\\d\\d\\d-\\d\\d-\\d\\d \\d\\d:\\d\\d:\\d\\d$" output))
         (error 'handled-error :text (format nil "Error in `file-mtime': ~a" output))
         output)))
 
 (defun directory-p (absolute-path)
-  (if (car (shell-wrapper (format nil "file '~a' |grep 'directory'" absolute-path))) t nil))
+  (if (car (org-ckons-core::shell-wrapper (format nil "file '~a' |grep 'directory'" absolute-path))) t nil))
 
 (defun symlink-p (absolute-path)
-  (if (car (shell-wrapper (format nil "file '~a' |grep 'symbolic link'" absolute-path))) t nil))
+  (if (car (org-ckons-core::shell-wrapper (format nil "file '~a' |grep 'symbolic link'" absolute-path))) t nil))
 
 (defun file-p (absolute-path)
   (if (or (directory-p absolute-path) (symlink-p absolute-path)) nil t))
@@ -100,10 +100,10 @@ old."
 (defun path-contained-p (root-path path-to-check)
   "Returns `(,root-path) if `path-to-check' is contained within `root-path',
 `nil' otherwise."
-  (match-it root-path path-to-check))
+  (org-ckons-core::match-it root-path path-to-check))
 
 (defun find-files (working-dir base-dir pattern)
-  (shell-wrapper (format nil
+  (org-ckons-core::shell-wrapper (format nil
                          "pushd ~a >/dev/null 2>&1 ; find ~a -iname '~a' ; popd >/dev/null 2>&1"
                          working-dir
                          base-dir

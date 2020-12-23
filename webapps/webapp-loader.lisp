@@ -9,6 +9,8 @@
 (defvar *webapp* nil)
 (defparameter *port* 3006)
 (defparameter *session-timeout* 14400)
+(defparameter *server-root* (namestring (asdf:system-relative-pathname (intern (package-name #.*package*)) "./"))
+  "The location of the web server root on the filesystem.")
 
 (defclass webapp ()
   ((name :initarg :name
@@ -57,7 +59,17 @@ file."))
   (mapcar (lambda (pages-file)
             (ppcre:regex-replace-all "\\.lisp$" (format nil "~a" pages-file) ""))
           (remove-if (lambda (x) (equal x "shared"))
-                     (shell-wrapper (format nil "find '~a' -maxdepth 1 -type f -iname 'pages*.lisp' |sort" (document-root webapp))))))
+                     (org-ckons-core::shell-wrapper (format nil "find '~a' -maxdepth 1 -type f -iname 'pages*.lisp' |sort" (document-root webapp))))))
+
+(defun make-server-path (relative-path)
+  "Makes a relative filesystem path into a full one, using
+`*server-root*' as the base."
+  (make-document-root-path *server-root* relative-path))
+
+(defun make-document-root-path (document-root relative-path)
+  "Makes a relative filesystem path into a full one, using
+`document-root' as the base."
+  (concatenate 'string document-root relative-path))
 
 (defun make-webapp-path (relative-path)
   "Makes an absolute filesystem path to a location in the webapps
@@ -67,12 +79,12 @@ folder."
 (defun get-options-files ()
   (mapcar (lambda (webapp-directory)
             (format nil "~a/conf/options.lisp" webapp-directory))
-          (remove-if (lambda (x) (or (match-it "webapps/$" x)
-                                     (match-it "webapps/shared$" x)
-                                     (match-it "webapps/CVS$" x)
-                                     (match-it "webapps/\\.$" x)
-                                     (match-it "webapps/\\.\\.$" x)))
-                     (shell-wrapper (format nil "find '~a' -maxdepth 1 -type d |sort" (make-webapp-path ""))))))
+          (remove-if (lambda (x) (or (org-ckons-core::match-it "webapps/$" x)
+                                     (org-ckons-core::match-it "webapps/shared$" x)
+                                     (org-ckons-core::match-it "webapps/CVS$" x)
+                                     (org-ckons-core::match-it "webapps/\\.$" x)
+                                     (org-ckons-core::match-it "webapps/\\.\\.$" x)))
+                     (org-ckons-core::shell-wrapper (format nil "find '~a' -maxdepth 1 -type d |sort" (make-webapp-path ""))))))
 
 (defun set-webapp (webapp)
   "Sets a `webapp' object in `*webapps*'.  The lookup key is the
@@ -127,7 +139,7 @@ overwritten with the new one."
   ;; backquote.
   (let ((package (string-downcase (package-name *package*))))
     `(let ((*webapp* (get-webapp ,package)))
-       (logger (format nil "Page request URI: [~a]" ,uri))
+       (org-ckons-core::logger (format nil "Page request URI: [~a]" ,uri))
        (unless *session*
          (start-session)
          (setf (session-max-time *session*) *session-timeout*)
@@ -139,7 +151,7 @@ overwritten with the new one."
 wish to publish."
   (let ((name (gensym)))
     `(progn
-       (logger (format nil "Publishing page. URL = [~a]" ,uri))
+       (org-ckons-core::logger (format nil "Publishing page. URL = [~a]" ,uri))
        (define-easy-handler (,name :uri ,uri :default-request-type ,request-type)
            ,var-list
          (with-request-wrapper ,uri ,page-function)))))

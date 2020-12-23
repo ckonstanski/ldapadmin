@@ -117,7 +117,7 @@ But HTML will print both of them"
 (destructure-html (tag attrs content) '((span :class \"strange\") \"A strange span!\")
   (format t \"<~A ~{~A~}>~{~A~}</~A>\" tag attrs content tag))
 If the construct is invalid, it will cause an error"
-  (once-only (html)
+  (org-ckons-core::once-only (html)
     `(if (htmlp ,html)
       (let ((,tag-sym (if (consp (car ,html))
 			  (caar ,html)
