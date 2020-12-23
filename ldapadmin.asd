@@ -17,8 +17,8 @@
        :depends-on ,(eval depends-on)
        :components ,components))
 
-(defparameter *quicklisp-packages* '(net-telent-date cl-ppcre uffi hunchentoot cl-log ironclad cl-json drakma trivial-ldap))
-(defparameter *asdf-packages* '(org-ckons-core))
+(defparameter *quicklisp-packages* '(net-telent-date cl-ppcre uffi hunchentoot cl-log ironclad cl-json trivial-ldap))
+(defparameter *asdf-packages* '(org-ckons-core org-ckons-http))
 (defparameter *all-packages* (append *quicklisp-packages* *asdf-packages*))
 
 (loop for pkg in *quicklisp-packages* do
@@ -29,17 +29,13 @@
               :maintainer "Carlos Konstanski <me@ckons.org>"
               :author "Carlos Konstanski <me@ckons.org>"
               :description "ldapadmin"
-              :long-description "ldapadmin is a web application written in Common Lisp, based on the Hunchentoot web server. It is an LDAP frontend web UI."
+              :long-description "ldapadmin is a web application written in Common Lisp, based on the Hunchentoot web server. It is a web UI frontend for LDAP."
               :depends-on *all-packages*
               :components ((:module core
                             :components ((:file "core")))
                            (:module condition
                             :depends-on (core)
                             :components ((:file "condition")))
-                           (:module http
-                            :depends-on (condition)
-                            :components ((:file "httputils")
-                                         (:file "html")))
                            (:module file
                             :depends-on (condition)
                             :components ((:file "file-utils")))
